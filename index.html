@@ -26,6 +26,20 @@
             <p>I am a student who loves physics and is passionate about exploring the laws of the universe.</p>
         </section>
 
+        <section id="widgets">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div id="quote-widget">
+                    <h3 id="quote-title">💭 Daily Wisdom</h3>
+                    <blockquote id="daily-quote"></blockquote>
+                    <button id="next-quote" style="width: 100%; padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 6px; cursor: pointer;">Next Quote</button>
+                </div>
+                <div id="weather-widget">
+                    <h3 id="weather-title">🌤️ Weather</h3>
+                    <div id="weather-info"></div>
+                </div>
+            </div>
+        </section>
+
         <section id="popular-articles">
             <div class="section-header">
                 <h2>My Popular Science Articles</h2>
@@ -65,7 +79,12 @@
                 titlePrompt: 'Enter article title:',
                 removeText: 'Remove',
                 darkText: 'Dark',
-                lightText: 'Light'
+                lightText: 'Light',
+                quoteTitle: '💭 Daily Wisdom',
+                weatherTitle: '🌤️ Weather',
+                nextQuote: 'Next Quote',
+                loadingWeather: 'Loading...',
+                weatherError: 'Unable to load weather'
             },
             tr: {
                 aboutTitle: 'Hakkımda',
@@ -78,7 +97,12 @@
                 titlePrompt: 'Yazı başlığını girin:',
                 removeText: 'Kaldır',
                 darkText: 'Koyu',
-                lightText: 'Açık'
+                lightText: 'Açık',
+                quoteTitle: '💭 Günlük Bilgelik',
+                weatherTitle: '🌤️ Hava Durumu',
+                nextQuote: 'Sonraki Söz',
+                loadingWeather: 'Yükleniyor...',
+                weatherError: 'Hava durumu yüklenemedi'
             }
         };
 
@@ -91,6 +115,9 @@
             document.querySelector('#popular-articles p').textContent = translations[currentLang].articlesDesc;
             document.querySelector('#contact h2').textContent = translations[currentLang].contactTitle;
             document.querySelector('#contact p').innerHTML = translations[currentLang].contactText + '<a href="https://mail.google.com/mail/?view=cm&fs=1&to=agurol779@gmail.com" target="_blank" rel="noopener noreferrer">agurol779@gmail.com</a>';
+            document.querySelector('#quote-title').textContent = translations[currentLang].quoteTitle;
+            document.querySelector('#weather-title').textContent = translations[currentLang].weatherTitle;
+            document.querySelector('#next-quote').textContent = translations[currentLang].nextQuote;
             langToggle.textContent = currentLang === 'en' ? 'TR' : 'EN';
         }
 
@@ -184,10 +211,98 @@
                 document.querySelectorAll('.delete-button').forEach(btn => {
                     btn.textContent = translations[currentLang].removeText;
                 });
+                // Update quote widget
+                displayRandomQuote();
             });
         }
 
+        // Famous Physicists Quotes
+        const quotes = {
+            en: [
+                '"The most beautiful thing we can experience is the mysterious. It is the source of all true art and science." – Albert Einstein',
+                '"I would rather have questions that can\'t be answered than answers that can\'t be questioned." – Richard Feynman',
+                '"Remember to look up at the stars, not down at your feet." – Stephen Hawking',
+                '"Nothing in life is to be feared, it is only to be understood." – Marie Curie',
+                '"If I have seen further, it is by standing on the shoulders of giants." – Isaac Newton',
+                '"Everything should be made as simple as possible, but not simpler." – Albert Einstein',
+                '"The important thing is not to stop questioning." – Albert Einstein',
+                '"Imagination is more important than knowledge." – Albert Einstein'
+            ],
+            tr: [
+                '"Yaşayabileceğimiz en güzel şey gizemdir. Tüm sanat ve biliimin kaynağıdır." – Albert Einstein',
+                '"Cevaplanamayan soruların olmasını cevaplandırılamayan cevapların olmasından daha tercih ederim." – Richard Feynman',
+                '"Ayaklarına değil, yıldızlara bakarak yukarı bakmayı unutma." – Stephen Hawking',
+                '"Hayatta korkacak bir şey yoktur, sadece anlaşılması gereken şeyler vardır." – Marie Curie',
+                '"Eğer daha ileri görmüşsem, bu devlerin omuzları üstünde durduğum içindir." – Isaac Newton',
+                '"Her şey mümkün olduğu kadar basit yapılmalı, ama daha basit değil." – Albert Einstein',
+                '"Önemli olan soru sormayı bırakmamaktır." – Albert Einstein',
+                '"Hayal gücü bilgiden daha önemlidir." – Albert Einstein'
+            ]
+        };
+
+        let currentQuoteIndex = 0;
+
+        function displayRandomQuote() {
+            const quoteWidget = document.getElementById('daily-quote');
+            currentQuoteIndex = Math.floor(Math.random() * quotes[currentLang].length);
+            quoteWidget.textContent = quotes[currentLang][currentQuoteIndex];
+        }
+
+        const nextQuoteButton = document.getElementById('next-quote');
+        if (nextQuoteButton) {
+            nextQuoteButton.addEventListener('click', displayRandomQuote);
+        }
+
+        // Weather Widget
+        async function loadWeather() {
+            try {
+                const weatherInfo = document.getElementById('weather-info');
+                weatherInfo.textContent = translations[currentLang].loadingWeather;
+
+                // Get user location
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+
+                        // Using Open-Meteo API (no API key needed)
+                        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto`);
+                        const data = await response.json();
+                        const current = data.current;
+
+                        const weatherCodes = {
+                            0: currentLang === 'en' ? 'Clear sky' : 'Açık gökyüzü',
+                            1: currentLang === 'en' ? 'Mainly clear' : 'Genellikle açık',
+                            2: currentLang === 'en' ? 'Partly cloudy' : 'Kısmen bulutlu',
+                            3: currentLang === 'en' ? 'Overcast' : 'Kapalı',
+                            45: currentLang === 'en' ? 'Foggy' : 'Sisli',
+                            51: currentLang === 'en' ? 'Light drizzle' : 'Hafif çisenti',
+                            61: currentLang === 'en' ? 'Slight rain' : 'Hafif yağmur',
+                            71: currentLang === 'en' ? 'Slight snow' : 'Hafif kar',
+                            80: currentLang === 'en' ? 'Moderate rain' : 'Orta şiddetli yağmur',
+                            95: currentLang === 'en' ? 'Thunderstorm' : 'Gök gürültülü fırtına'
+                        };
+
+                        const description = weatherCodes[current.weather_code] || 'Unknown';
+                        weatherInfo.innerHTML = `
+                            <p><strong>${currentLang === 'en' ? 'Temperature' : 'Sıcaklık'}:</strong> ${current.temperature_2m}°C</p>
+                            <p><strong>${currentLang === 'en' ? 'Condition' : 'Durum'}:</strong> ${description}</p>
+                            <p><strong>${currentLang === 'en' ? 'Wind Speed' : 'Rüzgar Hızı'}:</strong> ${current.wind_speed_10m} km/h</p>
+                        `;
+                    }, () => {
+                        weatherInfo.textContent = translations[currentLang].weatherError;
+                    });
+                } else {
+                    weatherInfo.textContent = translations[currentLang].weatherError;
+                }
+            } catch (e) {
+                document.getElementById('weather-info').textContent = translations[currentLang].weatherError;
+            }
+        }
+
         updateLanguage();
+        displayRandomQuote();
+        loadWeather();
     </script>
 </body>
 </html>

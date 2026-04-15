@@ -74,6 +74,63 @@ body.dark-mode blockquote {
     border-left-color: #7abaff;
 }
 
+#widgets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+#quote-widget, #weather-widget {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #007BFF;
+}
+
+body.dark-mode #quote-widget,
+body.dark-mode #weather-widget {
+    background-color: #2a2a2a;
+    border-left-color: #7abaff;
+}
+
+#quote-widget h3, #weather-widget h3 {
+    margin-top: 0;
+    color: #007BFF;
+}
+
+body.dark-mode #quote-widget h3,
+body.dark-mode #weather-widget h3 {
+    color: #7abaff;
+}
+
+#weather-info {
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+#next-quote {
+    margin-top: 12px;
+    transition: background-color 0.2s ease;
+}
+
+#next-quote:hover {
+    background-color: #0056c5;
+}
+
+body.dark-mode #next-quote {
+    background-color: #0061d5;
+}
+
+body.dark-mode #next-quote:hover {
+    background-color: #0056c5;
+}
+
+@media (max-width: 760px) {
+    #widgets {
+        grid-template-columns: 1fr;
+    }
+}
+
 footer {
     background-color: #222;
     color: white;

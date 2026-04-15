@@ -1,0 +1,285 @@
+/* Sayfanın genel gövde stili */
+:root {
+    font-family: Arial, sans-serif;
+    color-scheme: light;
+}
+
+body {
+    font-family: inherit; /* Temel yazı tipi */
+    background-color: #f4f4f4; /* Arka plan rengi */
+    color: #333; /* Metin rengi */
+    margin: 0;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Başlık bölümü stili */
+header {
+    background-color: #222222; /* Koyu arka plan */
+    color: white; /* Beyaz metin */
+    text-align: center; /* Metni ortalar */
+    padding: 40px 24px; /* İç boşluk ekler */
+}
+
+header h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.header-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.lang-button {
+    border: 1px solid #fff;
+    background: transparent;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+.lang-button:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+main {
+    padding-bottom: 40px;
+}
+
+section {
+    padding: 24px;
+    max-width: 840px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+blockquote {
+    font-style: italic;
+    border-left: 4px solid #007BFF;
+    padding-left: 16px;
+    margin: 20px 0;
+    color: #555;
+}
+
+body.dark-mode blockquote {
+    color: #aaa;
+    border-left-color: #7abaff;
+}
+
+footer {
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.plus-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.plus-button:hover {
+    background-color: #0056c5;
+}
+
+#article-list {
+    list-style: disc inside;
+    padding-left: 0;
+    margin-top: 12px;
+}
+
+#article-list li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 8px 0;
+    flex-wrap: wrap;
+}
+
+.article-text {
+    flex: 1 1 220px;
+    min-width: 180px;
+}
+
+.article-title {
+    display: inline-block;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.article-url {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555;
+    word-break: break-all;
+}
+
+.delete-button {
+    appearance: none;
+    border: 1px solid #cc0000;
+    background-color: #fff;
+    color: #cc0000;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.delete-button:hover {
+    background-color: #cc0000;
+    color: #fff;
+}
+
+.theme-button {
+    border: 1px solid #fff;
+    background: transparent;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.theme-button:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Link stili */
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 760px) {
+    header {
+        padding: 32px 16px;
+    }
+
+    section {
+        margin: 16px 12px;
+        padding: 20px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .plus-button,
+    .theme-button,
+    .lang-button {
+        width: 100%;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+
+    #article-list li {
+        align-items: flex-start;
+    }
+
+    .delete-button {
+        width: 100%;
+        text-align: center;
+        margin-top: 8px;
+    }
+
+    footer {
+        padding: 16px;
+    }
+}
+
+body.dark-mode {
+    background-color: #111;
+    color: #e8e8e8;
+}
+
+body.dark-mode header {
+    background-color: #121212;
+}
+
+body.dark-mode section {
+    background-color: #1c1c1c;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode a {
+    color: #7abaff;
+}
+
+body.dark-mode .delete-button {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+body.dark-mode .delete-button:hover {
+    background-color: #ff6b6b;
+}
+
+body.dark-mode .theme-button {
+    border-color: #fff;
+    color: #fff;
+}
+
+body.dark-mode .plus-button {
+    background-color: #0061d5;
+}
+
+body.dark-mode .lang-button {
+    border-color: #fff;
+    color: #fff;
+}
+
+body.dark-mode footer {
+    background-color: #121212;
+}
+
+a:hover {
+    text-decoration: underline;
+}
